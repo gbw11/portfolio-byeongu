@@ -45,7 +45,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Pretendard Variable", Pretendard, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", -apple-system, "Segoe UI", sans-serif;
   line-height: 1.65;
   word-break: keep-all;
   -webkit-font-smoothing: antialiased;
@@ -57,7 +57,7 @@ a { color: inherit; }
 
 /* nav */
 .nav {
-  position: sticky; top: 0; z-index: 10;
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
@@ -134,9 +134,32 @@ a { color: inherit; }
 .summary { font-size: 17px; margin: 18px 0; }
 .role-box { background: var(--bg-alt); border-radius: 10px; padding: 14px 16px; }
 .role-box p { margin: 0; }
-.flow { list-style: none; padding: 0; margin: 20px 0; display: flex; flex-wrap: wrap; gap: 6px; counter-reset: f; }
-.flow li { font-size: 13px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; position: relative; }
-.flow li:not(:last-child)::after { content: "→"; margin-left: 10px; color: var(--muted); }
+.flow-box { margin: 20px 0; }
+.flow { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; counter-reset: f; }
+.flow li {
+  counter-increment: f; position: relative; min-width: 0;
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 14px 16px; border-radius: 12px; background: var(--bg-alt); border: 1px solid var(--line);
+}
+.flow-step { font-size: 12px; font-weight: 700; color: var(--accent); }
+.flow-step::before { content: counter(f) ". "; font-variant-numeric: tabular-nums; }
+.flow li b { font-size: 15px; }
+.flow-sub { font-size: 13px; color: var(--muted); }
+.flow li:not(:last-child)::after {
+  content: "→"; position: absolute; right: -24px; top: 50%; transform: translateY(-50%);
+  font-size: 18px; font-weight: 700; color: var(--accent);
+}
+/* 한 줄 4개: 줄 끝 화살표는 숨기고, 다음 줄 첫 카드 앞에 표시 */
+.flow li:nth-child(4n)::after { content: none; }
+.flow li:nth-child(4n+1):not(:first-child)::before {
+  content: "→"; position: absolute; left: -24px; top: 50%; transform: translateY(-50%);
+  font-size: 18px; font-weight: 700; color: var(--accent);
+}
+@media (max-width: 760px) {
+  .flow { grid-template-columns: 1fr; gap: 26px; }
+  .flow li:nth-child(4n+1):not(:first-child)::before { content: none; }
+  .flow li:not(:last-child)::after { content: "↓"; right: auto; left: 50%; top: auto; bottom: -24px; transform: translateX(-50%); }
+}
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 20px 0; }
 .metric { border-left: 3px solid var(--accent); padding: 4px 12px; }
 .metric b { display: block; font-size: 22px; letter-spacing: -.02em; }
@@ -201,3 +224,25 @@ a { color: inherit; }
   .nav, .theme-btn, .cta { display: none; }
   details > *:not(summary) { display: block !important; }
 }
+
+button.btn { font-family: inherit; color: var(--text); cursor: pointer; }
+
+/* 소개 목록 */
+.intro-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.intro-list li { padding-left: 18px; position: relative; }
+.intro-list li::before { content: ""; position: absolute; left: 0; top: .8em; width: 8px; height: 2px; background: var(--accent); }
+
+/* 전후 비교 표 */
+.chg-wrap { overflow-x: auto; margin: 4px 0 20px; border: 1px solid var(--line); border-radius: 12px; }
+.chg { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 520px; }
+.chg th, .chg td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.chg tbody tr:last-child > * { border-bottom: 0; }
+.chg thead th { background: var(--bg-alt); font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
+.chg tbody th { font-weight: 600; white-space: nowrap; }
+.chg .before { color: var(--muted); }
+.chg .after { color: var(--ok); font-weight: 700; }
+.chg .after small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.intro-list a { text-decoration: none; color: var(--text); display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.intro-list a:hover { color: var(--accent); }
+.intro-list .go { font-size: 13px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.intro-list a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }

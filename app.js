@@ -32,7 +32,22 @@
     const m = CFG;
     $("eyebrow").textContent = m.eyebrow;
     $("tagline").innerHTML = esc(m.tagline).replace(/\n/g, "<br />");
-    $("intro").textContent = m.intro;
+    $("intro").innerHTML = Array.isArray(m.intro)
+      ? `<ul class="intro-list">${m.intro
+          .map((s) =>
+            s.field && FIELDS[s.field]
+              ? `<li><a href="#projects" data-go="${esc(s.field)}">${esc(s.text)}<span class="go">관련 사례 →</span></a></li>`
+              : `<li>${esc(s.text || s)}</li>`
+          )
+          .join("")}</ul>`
+      : esc(m.intro);
+    // 소개 문장을 누르면 해당 분야로 필터한 뒤 프로젝트로 이동
+    $("intro").addEventListener("click", (e) => {
+      const a = e.target.closest("a[data-go]");
+      if (!a || CFG.onlyTag) return;
+      field = a.dataset.go;
+      renderProjects();
+    });
     $("highlights").innerHTML = m.highlights
       .map((h) => `<div class="hl"><b>${esc(h.value)}</b><span>${esc(h.label)}</span></div>`)
       .join("");
@@ -107,15 +122,29 @@
       .map((m) => `<div class="metric"><b>${esc(m.value)}</b><span>${esc(m.label)}</span></div>`)
       .join("");
     const flow = p.flow.length
-      ? `<ol class="flow">${p.flow.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>`
+      ? `<div class="flow-box"><span class="label">데이터 흐름</span><ol class="flow">${p.flow
+          .map((f) => `<li><span class="flow-step">${esc(f.step)}</span><b>${esc(f.title)}</b>${f.sub ? `<span class="flow-sub">${esc(f.sub)}</span>` : ""}</li>`)
+          .join("")}</ol></div>`
       : "";
     const meta = [p.period, p.team].filter(Boolean).map(esc).join(" · ");
     const count = field === "all" ? p.cases.length : p.cases.filter((c) => c.tags.includes(field)).length;
 
-    // 간략히: 요약·수치·스택 / 자세히: 역할·흐름·트러블슈팅·결과
+    const changes = p.changes && p.changes.length
+      ? `<div class="chg-wrap"><table class="chg">
+          <thead><tr><th>항목</th><th>이전</th><th>이후</th></tr></thead>
+          <tbody>${p.changes
+            .map(
+              (c) => `<tr><th scope="row">${esc(c.item)}</th><td class="before">${esc(c.before)}</td>
+                <td class="after">${esc(c.after)}${c.note ? `<small>${esc(c.note)}</small>` : ""}</td></tr>`
+            )
+            .join("")}</tbody></table></div>`
+      : "";
+
+    // 간략히: 요약·수치·전후 비교·스택 / 자세히: 역할·흐름·트러블슈팅·결과
     const brief = `
       <p class="summary">${esc(p.summary)}</p>
       <div class="metrics">${metrics}</div>
+      ${changes}
       <ul class="tags">${p.stack.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>`;
 
     const detail = `

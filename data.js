@@ -16,22 +16,26 @@ window.PROFILE = {
 
 window.MAIN = {
   eyebrow: "Data Engineer",
-  tagline: "늦게, 겹쳐서, 틀리게 오는\n데이터를 먼저 걸러냅니다",
-  intro:
-    "수집 단계에서 데이터를 그대로 믿지 않는 개발자입니다. 메시지 계약을 먼저 쓰고 언어가 달라도 같은 시험 벡터로 검증하며, seq·boot_id로 중복과 역전을 버리고, 오래된 값이 신선한 값처럼 보이지 않게 신선도를 따로 표시합니다. 원천이 죽으면 대체 소스로 채우고, 감으로 정한 기준값은 실측 분포에 맞춰 고칩니다.",
+  tagline: "수집 단계에서\n데이터 품질을 지킵니다",
+  // field: 누르면 프로젝트 섹션이 해당 트러블슈팅 분야로 필터됨
+  intro: [
+    { text: "데이터 계약으로 형식과 규칙부터 맞춤.", field: "contract" },
+    { text: "중복 · 지연 · 잘못된 데이터를 수집 단계에서 걸러냄.", field: "quality" },
+    { text: "원천이 흔들려도 멈추지 않는 파이프라인 운영.", field: "ops" },
+  ],
   highlights: [
-    { value: "v1 → v1.7", label: "MQTT 데이터 계약 직접 작성·버전 관리 (Java·Python·C 구현)" },
-    { value: "112 · 71", label: "C·Python이 같은 시험 벡터로 통과한 검사 수 (실패 0)" },
+    { value: "v1 → v1.8.3", label: "MQTT 데이터 계약 직접 작성 · 16회 개정 (Java · Python · C 구현)" },
+    { value: "112 · 71", label: "C · Python이 같은 시험 벡터로 통과한 검사 수 (실패 0)" },
     { value: "0건", label: "스키마 diff 게이트 거짓 양성 (42개 테이블 · 412개 컬럼)" },
-    { value: "0.04초", label: "VM 목록 응답, 상류 3초 지연 환경 (이전 2.7~4.4초)" },
+    { value: "47회 연속", label: "급식봇 무실패 운영 (전체 95회 중 91회 성공)" },
   ],
   projectOrder: ["xenova", "lunchbot", "circular", "potner"],
   // 처음부터 보이는 트러블슈팅 (나머지는 '더 보기')
   featured: {
     xenova: ["heartbeat", "contract", "vectors", "cache"],
     lunchbot: ["retry", "fallback", "matching", "isolation"],
-    circular: ["schema-gate", "char-varchar", "forgery"],
-    potner: ["water-level", "brightness", "factcheck"],
+    circular: ["schema-gate", "char-varchar", "startblock"],
+    potner: ["water-level", "brightness", "device-id"],
   },
   skillOrder: ["pipeline", "storage", "quality", "ops", "lang", "analysis"],
 };
@@ -59,15 +63,30 @@ window.PROJECTS = {
     subtitle: "Raspberry Pi + Xen 멀티 OS 관리 플랫폼",
     period: "2026.10 ~ 진행 중",
     team: "SSAFY 15기 자율 프로젝트 · 6인 팀",
-    role: "MQTT 메시지 계약(v1~v1.7) 작성·관리, Python·C 공통 MQTT 라이브러리, 백엔드 텔레메트리 수집·주행 상태·VM 런타임 캐시, Mosquitto 브로커·ACL",
+    role: "MQTT 메시지 계약(v1~v1.8.3) 작성·관리, Python·C 공통 MQTT 라이브러리, 백엔드 텔레메트리 수집·주행 상태·VM 런타임 캐시, Mosquitto 브로커·ACL",
     summary:
       "라즈베리파이 한 대 위에 Xen으로 Linux·Zephyr VM을 함께 띄우는 플랫폼입니다. 각 VM의 에이전트가 MQTT로 텔레메트리·상태를 보내면 백엔드가 봉투를 검증하고 순서를 판정해 VM별 최신값으로 보관하고, 관리 콘솔과 차량 화면에 보여 줍니다.",
-    flow: ["VM 에이전트 (Python · C)", "공통 봉투 · seq 부착", "Mosquitto (ACL · retained)", "Spring Boot 검증 · 순서 판정", "VM별 최신값 · 신선도", "REST API · 관리 콘솔"],
+    flow: [
+      { step: "수집", title: "VM 에이전트", sub: "Python · C" },
+      { step: "포장", title: "공통 봉투", sub: "seq · boot_id 부착" },
+      { step: "전달", title: "Mosquitto 브로커", sub: "ACL · retained" },
+      { step: "검증", title: "Spring Boot", sub: "봉투 검사 · 순서 판정" },
+      { step: "저장", title: "VM별 최신값", sub: "신선도 표시" },
+      { step: "제공", title: "REST API", sub: "관리 콘솔 · 차량 화면" },
+    ],
     stack: ["Java · Spring Boot", "Eclipse Paho", "Mosquitto", "Python (paho-mqtt)", "C (Zephyr · jsmn)", "React · TS", "JUnit5", "Vitest", "Jenkins", "Docker Compose"],
     metrics: [
-      { value: "v1 → v1.7", label: "직접 작성·관리한 MQTT 데이터 계약" },
+      { value: "v1 → v1.8.3", label: "직접 작성·관리한 MQTT 데이터 계약" },
       { value: "112 · 71", label: "C·Python 공유 시험 벡터 검사 (실패 0)" },
-      { value: "0.04초", label: "VM 목록 응답 (상류 3초 지연 환경, 이전 2.7~4.4초)" },
+      { value: "283 → 457", label: "백엔드 테스트 수 (실패 0)" },
+    ],
+    changes: [
+      { item: "VM 목록 응답 시간", before: "2.7 ~ 4.4초", after: "0.036 ~ 0.059초", note: "이전은 EC2 실측, 이후는 상류 3초 지연 목 환경" },
+      { item: "메시지 형식 합의", before: "컴포넌트별 해석", after: "계약 v1 → v1.8.3 (16회 개정)" },
+      { item: "C · Python 규칙 일치", before: "공통 테스트 없음", after: "C 112 검사 · Py 71 벡터, 실패 0", note: "C 봉투(346 bytes)가 Python 검증 그대로 통과" },
+      { item: "텔레메트리 신선도", before: "구분 없음", after: "FRESH · STALE(6초) · UNKNOWN" },
+      { item: "상류 조회 타임아웃", before: "15초 (기본값)", after: "5초, 초과 시 504" },
+      { item: "백엔드 테스트", before: "283개", after: "457개, 실패 0" },
     ],
     results: [
       "seq · boot_id 기반 중복·역전 제거 규칙을 Python · C · Java 세 구현에 같은 계약으로 적용",
@@ -91,9 +110,9 @@ window.PROJECTS = {
         title: "세 컴포넌트가 각자 해석하던 메시지 형식",
         problem: "VM 에이전트, 차량 앱, 백엔드가 같은 MQTT 메시지 형식과 순서 규칙을 따라야 했습니다.",
         cause: "공통 데이터 계약과 공통 라이브러리가 없었습니다.",
-        action: "MQTT 메시지 계약 v1을 작성하고 v1.7까지 버전을 올리며 관리했습니다. Python 공통 라이브러리에 봉투 자동 부착·수신 검사(schema_version, boot_id, agent_instance_id, seq≥1), 발행자·토픽별 SeqTracker, type별 QoS·retain·크기 기본값을 넣었습니다.",
+        action: "MQTT 메시지 계약 v1을 작성하고 v1.8.3까지 버전을 올리며 관리했습니다. Python 공통 라이브러리에 봉투 자동 부착·수신 검사(schema_version, boot_id, agent_instance_id, seq≥1), 발행자·토픽별 SeqTracker, type별 QoS·retain·크기 기본값을 넣었습니다.",
         result: "boot_id나 인스턴스가 바뀌면 기준을 새로 잡고, 같거나 작은 seq는 중복·지연으로 버리는 규칙이 모든 발행·수신 경로에 적용됩니다.",
-        metric: "v1 → v1.7",
+        metric: "v1 → v1.8.3",
       },
       {
         id: "vectors", tags: ["contract", "quality"],
@@ -164,12 +183,27 @@ window.PROJECTS = {
     role: "수집·정제·매칭·전송 파이프라인과 스케줄·CI 전체 설계·구현",
     summary:
       "평일 오전 외부 cron이 GitHub Actions를 호출하면, 급식 원본(welplan)과 사진 소스(mealcloud)에서 메뉴·사진을 모아 중식만 걸러 코너별로 짝짓고 여러 Mattermost 방으로 보냅니다.",
-    flow: ["외부 cron → workflow_dispatch", "영업일 판정", "메뉴 원본 수집 (재시도)", "사진 수집 · 중식 필터", "두 소스 코너 매칭", "다중 채널 전송"],
+    flow: [
+      { step: "트리거", title: "외부 cron", sub: "workflow_dispatch" },
+      { step: "판정", title: "영업일 확인", sub: "주말 · 공휴일 제외" },
+      { step: "수집", title: "메뉴 원본", sub: "백오프 재시도 · 대체 소스" },
+      { step: "수집", title: "사진", sub: "중식만 필터" },
+      { step: "정제", title: "코너 매칭", sub: "두 소스 짝짓기" },
+      { step: "전송", title: "Mattermost", sub: "채널별 독립 전송" },
+    ],
     stack: ["Python", "GitHub Actions", "ThreadPoolExecutor", "holidays", "pytest", "Mattermost Webhook"],
     metrics: [
       { value: "5 · 15 · 30초", label: "일시적 5xx·타임아웃 백오프 재시도 (최대 3회)" },
       { value: "25초×6 → 1왕복", label: "코너 상세 조회 병렬화 (최악 대기 기준)" },
-      { value: "60개", label: "CI에서 도는 pytest 테스트" },
+      { value: "91 / 95회", label: "운영 실행 성공 (2026.08.19 ~ 11.09)" },
+    ],
+    changes: [
+      { item: "일시 장애(503) 대응", before: "1회 실패에 18초 만에 종료", after: "5 · 15 · 30초 백오프, 최대 3회 재시도" },
+      { item: "코너 상세 조회", before: "직렬, 최악 25초 × 6", after: "병렬, 1왕복" },
+      { item: "실행 시각", before: "GitHub schedule 10 ~ 40분 지연", after: "외부 cron, 매일 10:39 정시" },
+      { item: "운영 실패", before: "3회 (8/27 · 9/04 · 9/23)", after: "마지막 수정 후 47회 연속 성공", note: "원인별로 재시도 · 부가 조회 격리 · 대체 소스로 수정" },
+      { item: "이미지 다운로드", before: "이미지당 최대 3회", after: "1회 (캐시)" },
+      { item: "테스트", before: "10개", after: "62개" },
     ],
     results: [
       "외부 cron 단일 트리거로 바꿔 같은 날 중복 게시 가능성 제거",
@@ -248,12 +282,26 @@ window.PROJECTS = {
     role: "인프라(EC2·Compose·Nginx·Jenkins·시크릿) 담당 + 지갑 서명 로그인, 공통 기능, Material 도메인",
     summary:
       "폐소재 등록부터 가공·생산·소비자 구매까지 소재 이력을 Hyperledger Besu에 기록하고, 제품 QR 여권으로 공개 검증하는 플랫폼입니다.",
-    flow: ["공급자 소재 등록 · mint", "마켓 거래", "브랜드 가공 의뢰", "생산 배치 확정", "제품 QR", "소비자 QR 여권 조회"],
+    flow: [
+      { step: "등록", title: "소재 등록", sub: "공급자 · mint" },
+      { step: "거래", title: "마켓 거래", sub: "" },
+      { step: "가공", title: "가공 의뢰", sub: "브랜드" },
+      { step: "생산", title: "생산 배치 확정", sub: "" },
+      { step: "발급", title: "제품 QR", sub: "" },
+      { step: "조회", title: "QR 여권", sub: "소비자 공개 검증" },
+    ],
     stack: ["Spring Boot", "MySQL 8", "Docker Compose", "Jenkins (JCasC)", "Nginx", "Hyperledger Besu", "web3j", "MinIO"],
     metrics: [
       { value: "0건", label: "스키마 diff 거짓 양성 (42개 테이블 · 412개 컬럼)" },
       { value: "P0 차단", label: "클라이언트가 보고한 tx 해시를 체인 영수증으로 재검증" },
       { value: "14일", label: "MySQL 매일 백업 보관 + 오프사이트 반출" },
+    ],
+    changes: [
+      { item: "스키마 검사 범위", before: "컬럼 이름만 비교", after: "타입 · NULL 허용까지 대조" },
+      { item: "스키마 검사 정확도", before: "\"OK\" 판정 후 운영 기동 실패", after: "거짓 양성 0건 (412개 컬럼), 주입 오류 6/6 검출" },
+      { item: "체인 기록 검증", before: "위조 tx 해시 3건 '검증됨' 표시", after: "저장 전 체인 영수증 대조" },
+      { item: "DB 백업", before: "없음", after: "매일 03:10, 14일 보관" },
+      { item: "배포 실패 복구", before: "롤백 미동작", after: "25초 내 직전 이미지로 자동 롤백" },
     ],
     results: [
       "병합 전 마이그레이션 CI 게이트: 임시 MySQL 두 개를 information_schema로 대조",
@@ -298,7 +346,7 @@ window.PROJECTS = {
       {
         id: "startblock", tags: ["ingest"],
         title: "이벤트 로그 조회가 제네시스부터 전체 스캔",
-        problem: "MetaMask 서명 확인까지 수십 초가 걸리는 문제가 해결된 뒤 다시 나타났습니다.",
+        problem: "소재 등록 때 MetaMask 서명 창이 뜨기까지 수십 초가 걸리는 문제가 해결된 뒤 다시 나타났습니다.",
         cause: "중복 발행 체크가 제네시스 블록부터 전체 로그를 훑었습니다. 시작 블록 환경변수가 빌드 인자와 배포 .env 양쪽에서 빠져 0으로 폴백됐습니다.",
         action: "컨트랙트 배포 시각을 블록 번호 이진 탐색으로 대응시켜 시작 블록(11,221,171)을 확정하고, 빌드 인자와 배포 환경변수 양쪽에 반영했습니다.",
         result: "전체 체인 스캔 없이 배포 이후 로그만 조회합니다.",
@@ -331,17 +379,30 @@ window.PROJECTS = {
     role: "라즈베리파이 스테이션(센서 수집·급수·송풍·촬영) 단독 설계·구현, 로봇 LLM·음성 파이프라인 구현",
     summary:
       "스테이션(Raspberry Pi)이 토양·수위 센서와 식물 사진을 수집해 MQTT로 서버에 보내고, 서버 판정에 따라 급수·송풍·촬영을 수행합니다.",
-    flow: ["센서 수집 (RPi)", "다수결 읽기 · 홀드 게이트", "MQTT · Mosquitto ACL", "Spring Boot 판정", "command 수행", "result 회신"],
+    flow: [
+      { step: "수집", title: "센서 (RPi)", sub: "토양 · 수위 · 사진" },
+      { step: "정제", title: "다수결 읽기", sub: "홀드 게이트" },
+      { step: "전달", title: "MQTT", sub: "Mosquitto ACL" },
+      { step: "판정", title: "Spring Boot", sub: "급수 · 송풍 · 촬영 결정" },
+      { step: "수행", title: "명령 실행", sub: "command" },
+      { step: "회신", title: "결과 발행", sub: "result" },
+    ],
     stack: ["Python", "Raspberry Pi", "MQTT", "Picamera2", "FastAPI", "pytest", "systemd"],
     metrics: [
-      { value: "650+", label: "하드웨어·실제 API 없이 통과하는 테스트" },
-      { value: "13,200줄", label: "스테이션 코드·테스트·설정 (전부 본인 커밋)" },
+      { value: "633개", label: "하드웨어·실제 API 없이 통과하는 로봇 쪽 테스트" },
+      { value: "약 14,000줄", label: "스테이션 Python 코드·테스트 (대부분 본인 커밋)" },
       { value: "4중", label: "과급수 방지 안전 게이트" },
+    ],
+    changes: [
+      { item: "물 부족 알림", before: "물을 채워도 해제 안 됨", after: "10초 홀드 후 true / false 재확정" },
+      { item: "수위 센서 읽기", before: "단일 측정", after: "5표 다수결 (0.06초 간격)" },
+      { item: "밝기 기준값", before: "상한 215 (합성 데이터)", after: "실측 204 ~ 246 반영, 탈락 대신 경고", note: "실기 사진 4장 중 1장이 탈락하던 문제" },
+      { item: "사진 색 편차", before: "R 12% · B 19% 낮음", after: "고정 게인 [1.548, 1.401]" },
     ],
     results: [
       "platform: mock 설정만 바꾸면 하드웨어 없이 전체 수집·제어 로직을 검증하는 HAL 구조",
       "센서 상태를 NO_DATA(값 제외)와 STALE(값은 쓰되 재판정)로 구분",
-      "테스트가 없던 모듈에 54건을 새로 작성해 실제 버그 3건 발견·수정",
+      "테스트가 없던 모듈에 54건을 새로 작성해 실제 버그 발견·수정",
     ],
     cases: [
       {
@@ -356,8 +417,8 @@ window.PROJECTS = {
         id: "brightness", tags: ["quality"],
         title: "합성 데이터로 정한 기준값이 실측 사진을 탈락시킴",
         problem: "밝기 검사가 ERROR를 내면 촬영 체인 전체가 중단돼 그날 사진이 남지 않았습니다.",
-        cause: "합성 이미지로 잡은 상한 215가 실기 사진 분포(200~246)와 맞지 않았습니다. 실기 4장 중 245.7이 탈락했습니다.",
-        action: "실패 동작을 reject에서 warn으로 바꿔 사진을 보존하고, 노출 보정도 1.0에서 0.3으로 완화했습니다.",
+        cause: "합성 이미지로 잡은 상한 215가 실기 사진 분포(204~246)와 맞지 않았습니다. 실기 4장 중 245.7이 탈락했습니다.",
+        action: "실패 동작을 reject에서 warn으로 바꿔 사진을 보존하고, 노출 보정도 실측에 맞춰 완화했습니다.",
         result: "기준값을 실측 분포에 맞춰 데이터 유실을 막았습니다.",
       },
       {
@@ -387,18 +448,10 @@ window.PROJECTS = {
       {
         id: "awb", tags: ["quality"],
         title: "촬영 사진 전체에 녹색빛이 섞임",
-        problem: "실사진의 R/B 채널이 G 대비 15~20% 낮았습니다.",
+        problem: "실사진의 R/B 채널이 G 대비 각각 약 12%, 19% 낮았습니다.",
         cause: "자동 화이트밸런스가 잎(녹색) 위주 장면에서 오작동했습니다.",
         action: "Gray-world 기반 색편차 분석 도구를 만들어 고정 게인 [1.548, 1.401]을 산출하고, 메타데이터 없는 JPEG에는 게인을 제안하지 않는 안전장치를 두었습니다.",
         result: "무채색 기준으로 색 편차가 사라진 것을 확인했습니다. 관련 테스트 21건을 작성했습니다.",
-      },
-      {
-        id: "cost", tags: ["quality"],
-        title: "LLM 비용 구조 실측",
-        problem: "대화 기능의 비용이 어디서 발생하는지 근거 없이 추정하고 있었습니다.",
-        cause: "턴마다 시스템 프롬프트와 대화 맥락이 반복 전송됩니다.",
-        action: "10턴 대화의 크레딧·토큰을 실측하고, tool 호출·응답 쌍이 끊기지 않게 교환 단위로 맥락을 자르도록 했습니다.",
-        result: "10턴 464크레딧(34,581토큰), 입력 토큰이 95%임을 파악했습니다.",
       },
     ],
   },
