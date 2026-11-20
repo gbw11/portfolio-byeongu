@@ -277,7 +277,7 @@ window.PROJECTS = {
   circular: {
     title: "SAEROI",
     subtitle: "블록체인 기반 업사이클링 소재 유통 플랫폼",
-    period: "2026.08 ~ 2026.09",
+    period: "2026.08 ~ 2026.10",
     team: "SSAFY 15기 특화 프로젝트 · 6인 팀",
     role: "인프라(EC2·Compose·Nginx·Jenkins·시크릿) 담당 + 지갑 서명 로그인, 공통 기능, Material 도메인",
     summary:
