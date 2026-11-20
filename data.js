@@ -51,7 +51,7 @@ window.FIELDS = {
 window.SKILLS = {
   pipeline: { title: "수집 · 메시징", items: ["MQTT 3.1.1 (QoS · retained · ACL)", "Mosquitto 브로커 운영", "Eclipse Paho (Java) · paho-mqtt (Python)", "REST 수집 · 지수 백오프 재시도", "GitHub Actions · cron 스케줄링", "SSE 스트리밍"] },
   storage: { title: "저장 · 모델링", items: ["MySQL 8 (생성 컬럼 UNIQUE, information_schema)", "JPA · H2", "JSON 메시지 봉투 · 스키마 버전 설계", "스냅샷 캐시 · stale 상한 설계", "MinIO (S3)"] },
-  quality: { title: "데이터 품질 · 테스트", items: ["언어 간 공유 시험 벡터 (C · Python)", "pytest", "JUnit5 · MockMvc", "Vitest", "ASan · UBSan"] },
+  quality: { title: "데이터 품질 · 테스트", items: ["언어 간 공유 시험 벡터 (C · Python)", "pytest", "MockMvc", "Vitest", "ASan · UBSan"] },
   ops: { title: "운영 · 인프라", items: ["Docker · Docker Compose", "Jenkins Multibranch · JCasC", "Nginx", "Linux · systemd · cron(flock)", "MySQL 백업 · 복구 스크립트"] },
   lang: { title: "언어 · 백엔드", items: ["Python", "Java · Spring Boot", "SQL", "C (Zephyr, jsmn)", "TypeScript · React"] },
   analysis: { title: "분석 · 기초", items: ["수학 · 데이터사이언스 복수전공", "빅데이터분석기사 · ADsP · SQLD", "실측 분포 기반 기준값 보정", "Gray-world 색편차 분석 (Python)"] },
@@ -74,7 +74,7 @@ window.PROJECTS = {
       { step: "저장", title: "VM별 최신값", sub: "신선도 표시" },
       { step: "제공", title: "REST API", sub: "관리 콘솔 · 차량 화면" },
     ],
-    stack: ["Java · Spring Boot", "Eclipse Paho", "Mosquitto", "Python (paho-mqtt)", "C (Zephyr · jsmn)", "React · TS", "JUnit5", "Vitest", "Jenkins", "Docker Compose"],
+    stack: ["Java · Spring Boot", "Eclipse Paho", "Mosquitto", "Python (paho-mqtt)", "C (Zephyr · jsmn)", "React · TS", "Vitest", "Jenkins", "Docker Compose"],
     metrics: [
       { value: "v1 → v1.8.3", label: "직접 작성·관리한 MQTT 데이터 계약" },
       { value: "112 · 71", label: "C·Python 공유 시험 벡터 검사 (실패 0)" },
@@ -275,8 +275,8 @@ window.PROJECTS = {
   },
 
   circular: {
-    title: "Circular-Fashion",
-    subtitle: "순환 패션 소재 유통 플랫폼",
+    title: "SAEROI",
+    subtitle: "블록체인 기반 업사이클링 소재 유통 플랫폼",
     period: "2026.08 ~ 2026.09",
     team: "SSAFY 15기 특화 프로젝트 · 6인 팀",
     role: "인프라(EC2·Compose·Nginx·Jenkins·시크릿) 담당 + 지갑 서명 로그인, 공통 기능, Material 도메인",
@@ -389,7 +389,7 @@ window.PROJECTS = {
     ],
     stack: ["Python", "Raspberry Pi", "MQTT", "Picamera2", "FastAPI", "pytest", "systemd"],
     metrics: [
-      { value: "633개", label: "하드웨어·실제 API 없이 통과하는 로봇 쪽 테스트" },
+      { value: "312개", label: "하드웨어·실제 API 없이 통과하는 로봇 쪽 본인 작성 테스트" },
       { value: "약 14,000줄", label: "스테이션 Python 코드·테스트 (대부분 본인 커밋)" },
       { value: "4중", label: "과급수 방지 안전 게이트" },
     ],
@@ -426,7 +426,7 @@ window.PROJECTS = {
         title: "LLM이 센서값을 지어내지 않도록 검증",
         problem: "팩트체크가 정답(영하 온도)을 기각했고, 오래된 센서값이 답변에 섞일 위험이 있었습니다.",
         cause: "'영하 5도'를 +5로 파싱하는 버그가 있었고, '값 없음'과 '오래된 값'의 의미가 구분되지 않았습니다.",
-        action: "파싱을 고치고 회귀 테스트 3건을 추가했습니다. 센서 상태를 NO_DATA와 STALE로 나누고, 폴백 파일에 트랩값(99.9°C)을 심었습니다.",
+        action: "파싱을 고치고 회귀 테스트 3건을 추가했습니다. 센서 상태를 NO_DATA와 STALE로 나누고, 폴백 파일에 무작위로 대량 생성한 트랩값을 심었습니다.",
         result: "'서버 실측 → 툴 → 팩트체크 → 답변' 경로가 폴백을 우회하지 않음을 E2E로 증명했습니다.",
       },
       {
